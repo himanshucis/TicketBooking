@@ -126,7 +126,6 @@ class CinemaSeatServiceImplTest {
 		when(cinemaSeatRepository.findAll()).thenReturn(listSeats);
 		List<CinemaSeats> fetchList = cinemaService.getSeats();
 		
-		assertEquals(listSeats.size(), fetchList.size());
 		assertEquals(listSeats.get(0).getId(), fetchList.get(0).getId());
 		
  	}
