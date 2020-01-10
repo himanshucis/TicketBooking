@@ -1,0 +1,179 @@
+/**
+ * 
+ */
+package com.ticketbooking.test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.ticketbooking.constant.SqlQueries;
+import com.ticketbooking.entity.CinemaSeats;
+import com.ticketbooking.entity.User;
+import com.ticketbooking.repository.CinemaSeatRepository;
+import com.ticketbooking.services.CinemaSeatService;
+
+/**
+ * @author cis
+ *
+ */
+@SpringBootTest
+@RunWith(SpringRunner.class)
+class CinemaSeatServiceImplTest {
+
+	@MockBean 
+	private CinemaSeatRepository cinemaSeatRepository;
+	
+	@MockBean
+	private EntityManager entityManager;
+
+	@Autowired
+	private CinemaSeatService cinemaService;
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterAll
+	static void tearDownAfterClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeEach
+	void setUp() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterEach
+	void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testInsert() {
+		when(entityManager.createNativeQuery(Mockito.anyString())).thenReturn(getQuery());
+		
+	}
+	
+	@Test
+	public void testSaveSeat() {
+		CinemaSeats seat = new CinemaSeats();
+		User user = new User();
+		user.setId(1l);
+		user.setEmail("user@gmail.com");
+		user.setAddress("indore");
+		user.setMobile("8877664455");
+		user.setPassword("user");
+		user.setName("user");
+		seat.setId(1l);
+		seat.setSeatNo(1l);
+		seat.setUser(user);
+		seat.setStatus(1);
+		when(cinemaSeatRepository.findBySeatNo(Mockito.anyLong())).thenReturn(seat);
+		when(cinemaSeatRepository.save(Mockito.any(CinemaSeats.class))).thenReturn(seat);
+		CinemaSeats saveSeats = cinemaService.saveSeat(seat);
+		assertEquals(saveSeats.getId(), seat.getId());
+	}
+
+	@Test
+	public void testGetAllSeats() {
+		List<CinemaSeats> listSeats = new ArrayList<CinemaSeats>();
+		CinemaSeats seat = new CinemaSeats();
+		User bookUser = new User();
+		bookUser.setId(1l);
+		bookUser.setEmail("user@gmail.com");
+		bookUser.setAddress("indore");
+		bookUser.setMobile("8877664455");
+		bookUser.setPassword("user");
+		bookUser.setName("user");
+		seat.setId(1l);
+		seat.setSeatNo(1l);
+		seat.setUser(bookUser);
+		seat.setStatus(1);
+		
+		CinemaSeats seats = new CinemaSeats();
+		seats.setStatus(1);
+		seats.setId(2l);
+		
+		listSeats.add(seat);
+		listSeats.add(seats);
+		
+		when(cinemaSeatRepository.findAll()).thenReturn(listSeats);
+		List<CinemaSeats> fetchList = cinemaService.getSeats();
+		
+		assertEquals(listSeats.size(), fetchList.size());
+		assertEquals(listSeats.get(0).getId(), fetchList.get(0).getId());
+		
+ 	}
+
+	@Test
+	void testUpdateSeat() {
+		CinemaSeats seat = new CinemaSeats();
+		User bookUser = new User();
+		bookUser.setId(1l);
+		bookUser.setEmail("user@gmail.com");
+		bookUser.setAddress("indore");
+		bookUser.setMobile("8877664455");
+		bookUser.setPassword("user");
+		bookUser.setName("user");
+		seat.setId(1l);
+		seat.setSeatNo(1l);
+		seat.setUser(bookUser);
+		seat.setStatus(1);
+		when(cinemaSeatRepository.findBySeatNo(Mockito.anyLong())).thenReturn((seat));
+		CinemaSeats updateSeat = cinemaService.updateSeat(seat);
+		assertEquals(updateSeat.getId(),seat.getId());
+	}
+	
+	public Query getQuery() {
+		Query query = entityManager.createNativeQuery("INSERT INTO seats (id,seat_no,status,user_id) VALUES" + "\n" + 
+				                         "(1,1,0,null),\n" +
+				                         "(2,2,0,null),\n" + 
+				                         "(3,3,0,null),\n" + 
+				                         "(4,4,0,null),\n" + 
+				                         "(5,5,0,null),\n" + 
+				                         "(6,6,0,null),\n" + 
+				                         "(7,7,0,null),\n" + 
+				                         "(8,8,0,null),\n" + 
+				                         "(9,9,0,null),\n" + 
+				                         "(10,10,0,null),\n" + 
+				                         "(11,11,0,null),\n" + 
+				                         "(12,12,0,null),\n" + 
+				                         "(13,13,0,null),\n" + 
+				                         "(14,14,0,null),\n" + 
+				                         "(15,15,0,null),\n" + 
+				                         "(16,16,0,null),\n" + 
+				                         "(17,17,0,null),\n" + 
+				                         "(18,18,0,null),\n" + 
+				                         "(19,19,0,null),\n" + 
+				                         "(20,20,0,null);\n");
+		return query;	
+	}
+	
+}
