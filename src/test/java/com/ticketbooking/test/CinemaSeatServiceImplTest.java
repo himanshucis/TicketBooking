@@ -38,11 +38,10 @@ import com.ticketbooking.services.CinemaSeatService;
 @RunWith(SpringRunner.class)
 class CinemaSeatServiceImplTest {
 
-	@MockBean 
 	private CinemaSeatRepository cinemaSeatRepository;
-	
+
 	@MockBean
-	private EntityManager entityManager;
+	private Query query;
 
 	@Autowired
 	private CinemaSeatService cinemaService;
@@ -66,6 +65,7 @@ class CinemaSeatServiceImplTest {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
+		cinemaSeatRepository = Mockito.mock(CinemaSeatRepository.class);
 	}
 
 	/**
@@ -77,8 +77,7 @@ class CinemaSeatServiceImplTest {
 
 	@Test
 	public void testInsert() {
-		when(entityManager.createNativeQuery(Mockito.anyString())).thenReturn(getQuery());
-		
+		when(query.executeUpdate()).thenReturn(2);
 	}
 	
 	@Test
